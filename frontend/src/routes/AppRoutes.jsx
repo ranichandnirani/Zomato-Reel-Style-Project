@@ -1,17 +1,21 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import UserRegisterPage from '../pages/UserRegisterPage.jsx'
+import UserLoginPage from '../pages/UserLoginPage.jsx'
+import FoodPartnerRegisterPage from '../pages/FoodPartnerRegisterPage.jsx'
+import FoodPartnerLoginPage from '../pages/FoodPartnerLoginPage.jsx'
 
 const AppRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/user/register" element={<h1>User Register</h1>} />,
-        <Route path="/user/login" element={<h1>User Login</h1>} />,
-        <Route path="/food-partner/register" element={<h1>Food Partner Register</h1>}/>,
-        <Route path="/food-partner/login" element={<h1>Food Partner Login</h1>}/>
+        <Route path="/user/register" element={<UserRegisterPage />} />
+        <Route path="/user/login" element={<UserLoginPage />} />
+        <Route path="/food-partner/register" element={<FoodPartnerRegisterPage />} />
+        <Route path="/food-partner/login" element={<FoodPartnerLoginPage />} />
       </Routes>
     </Router>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes
