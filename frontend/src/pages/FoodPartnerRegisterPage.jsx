@@ -8,10 +8,11 @@ const FoodPartnerRegisterPage = () => {
       title="Join as a food partner"
       subtitle="Grow your reach with a simple, polished presence for your kitchen."
       roleLabel="Food Partner"
-      accentLabel="Food-Partner access"
+      accentLabel="Food partner access"
       isRegister
       footerText="Already partnered with us?"
       footerLinkLabel="Sign in"
+      footerLinkHref="/food-partner/login"
     />
   )
 }

@@ -96,7 +96,7 @@ function logOutUser(req, res) {
 }
 
 async function registerFoodPartner(req, res) {
-    const {name, email, password} = req.body;
+    const {name, email, password, phone, address, contactName } = req.body;
 
     const isAccountAlreadyExists = await foodpartnerModel.findOne({
         email
@@ -115,7 +115,10 @@ async function registerFoodPartner(req, res) {
     const foodPartner = await foodpartnerModel.create({
         name,
         email,
-        password: hashedPassword
+        password: hashedPassword, 
+        phone,
+        address,
+        contactName
     })
 
     // create token
@@ -132,7 +135,10 @@ async function registerFoodPartner(req, res) {
         user: {
             _id: foodPartner._id,
             email: foodPartner.email,
-            name: foodPartner.name
+            name: foodPartner.name,
+            address: foodPartner.address,
+            phone: foodPartner.phone,
+            contactName: foodPartner.contactName
         } 
      })     
 }

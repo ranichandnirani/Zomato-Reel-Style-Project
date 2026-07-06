@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import '../styles/auth.css'
 
 const AuthCard = ({
@@ -9,7 +10,16 @@ const AuthCard = ({
   isRegister = false,
   footerText,
   footerLinkLabel,
+  footerLinkHref = '#',
 }) => {
+  const isFoodPartner = roleLabel === 'Food Partner'
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    // Hook to your auth service goes here.
+    console.log(`${isRegister ? 'Register' : 'Login'} submit`, { role: roleLabel })
+  }
+
   return (
     <div className="auth-shell">
       <div className="auth-card">
@@ -20,10 +30,17 @@ const AuthCard = ({
         </div>
 
         <div className="auth-card__form">
-          <form className="auth-form">
+          <div className="auth-card__header">
+            <div>
+              <h1>{isRegister ? `${roleLabel} signup` : `${roleLabel} sign in`}</h1>
+              <p>{isRegister ? 'Create your access and start using the platform.' : 'Use your account credentials to continue.'}</p>
+            </div>
+          </div>
+
+          <form className="auth-form" onSubmit={handleSubmit} noValidate>
             {isRegister && (
               <div className="auth-row">
-                {roleLabel === 'Food Partner' ? (
+                {isFoodPartner ? (
                   <label className="auth-field" style={{ gridColumn: '1 / -1' }}>
                     <span>Business Name</span>
                     <input type="text" placeholder="Sunny Bites" />
@@ -63,42 +80,33 @@ const AuthCard = ({
               <input type="email" placeholder="name@example.com" />
             </label>
 
-            {isRegister && (
-              <label className="auth-field">
-                <span>Password</span>
-                <input type="password" placeholder="Enter password" />
-              </label>
-            )}
+            <label className="auth-field">
+              <span>Password</span>
+              <input type="password" placeholder="Enter password" />
+            </label>
 
-            {!isRegister && (
-              <label className="auth-field">
-                <span>Password</span>
-                <input type="password" placeholder="Enter password" />
-              </label>
-            )}
-
-            {isRegister && (
+            {isRegister && isFoodPartner && (
               <label className="auth-field">
                 <span>Address</span>
                 <input type="text" placeholder="123, Main Street, City" />
               </label>
             )}
 
-            <button type="button" className="auth-submit">
+            <button type="submit" className="auth-submit">
               {isRegister ? 'Create account' : 'Sign in'}
             </button>
           </form>
 
           <div className="auth-footer">
             <p>{footerText}</p>
-            <a href="#">{footerLinkLabel}</a>
+            <Link to={footerLinkHref}>{footerLinkLabel}</Link>
           </div>
 
           <div className="auth-role-links">
             <span>Sign up as</span>
-            <a href="/user/register">User</a>
+            <Link to="/user/register">User</Link>
             <span>or</span>
-            <a href="/food-partner/register">Food-partner</a>
+            <Link to="/food-partner/register">Food partner</Link>
           </div>
         </div>
       </div>

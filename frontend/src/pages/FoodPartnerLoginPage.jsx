@@ -8,9 +8,10 @@ const FoodPartnerLoginPage = () => {
       title="Partner dashboard"
       subtitle="Welcome back. Manage your menu, orders, and reach in one place."
       roleLabel="Food Partner"
-      accentLabel="Food-Partner access"
+      accentLabel="Food partner access"
       footerText="New partner?"
       footerLinkLabel="Create account"
+      footerLinkHref="/food-partner/register"
     />
   )
 }

@@ -11,6 +11,7 @@ const UserLoginPage = () => {
       accentLabel="User access"
       footerText="New here?"
       footerLinkLabel="Create account"
+      footerLinkHref="/user/register"
     />
   )
 }

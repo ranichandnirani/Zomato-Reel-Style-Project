@@ -80,6 +80,43 @@ body {
   padding: 20px 28px 28px;
 }
 
+.auth-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.auth-card__header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.auth-card__header p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.auth-card__nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.auth-card__nav strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.auth-card__nav a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
 .auth-chip {
   display: inline-flex;
   align-items: center;
