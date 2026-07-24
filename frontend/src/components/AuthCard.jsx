@@ -11,12 +11,17 @@ const AuthCard = ({
   footerText,
   footerLinkLabel,
   footerLinkHref = '#',
+  onSubmit,
 }) => {
   const isFoodPartner = roleLabel === 'Food Partner'
 
   const handleSubmit = (event) => {
+    if (typeof onSubmit === 'function') {
+      onSubmit(event)
+      return
+    }
+
     event.preventDefault()
-    // Hook to your auth service goes here.
     console.log(`${isRegister ? 'Register' : 'Login'} submit`, { role: roleLabel })
   }
 
@@ -43,52 +48,52 @@ const AuthCard = ({
                 {isFoodPartner ? (
                   <label className="auth-field" style={{ gridColumn: '1 / -1' }}>
                     <span>Business Name</span>
-                    <input type="text" placeholder="Sunny Bites" />
+                    <input name="name" type="text" placeholder="Sunny Bites" />
                   </label>
                 ) : (
                   <>
                     <label className="auth-field auth-field--half">
                       <span>First Name</span>
-                      <input type="text" placeholder="Alex" />
+                      <input name="firstName" type="text" placeholder="Alex" />
                     </label>
 
                     <label className="auth-field auth-field--half">
                       <span>Last Name</span>
-                      <input type="text" placeholder="Carter" />
+                      <input name="lastName" type="text" placeholder="Carter" />
                     </label>
                   </>
                 )}
               </div>
             )}
 
-            {isRegister && (
+            {isRegister && isFoodPartner && (
               <div className="auth-row">
                 <label className="auth-field auth-field--half">
                   <span>Contact Name</span>
-                  <input type="text" placeholder="Jordan Carter" />
+                  <input name="contactName" type="text" placeholder="Jordan Carter" />
                 </label>
 
                 <label className="auth-field auth-field--half">
                   <span>Contact Number</span>
-                  <input type="tel" placeholder="+91 98765 43210" />
+                  <input name="phone" type="tel" placeholder="+91 98765 43210" />
                 </label>
               </div>
             )}
 
             <label className="auth-field">
               <span>Email</span>
-              <input type="email" placeholder="name@example.com" />
+              <input name="email" type="email" placeholder="name@example.com" />
             </label>
 
             <label className="auth-field">
               <span>Password</span>
-              <input type="password" placeholder="Enter password" />
+              <input name="password" type="password" placeholder="Enter password" />
             </label>
 
             {isRegister && isFoodPartner && (
               <label className="auth-field">
                 <span>Address</span>
-                <input type="text" placeholder="123, Main Street, City" />
+                <input name="address" type="text" placeholder="123, Main Street, City" />
               </label>
             )}
 
