@@ -48,6 +48,12 @@
   object-fit: cover;
 }
 
+.reel-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+ 
 /* Overlay */
 .reel-overlay {
   position: absolute;
@@ -60,6 +66,8 @@
   justify-content: space-between;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
   pointer-events: none;
+  gap: 16px;
+  z-index: 2;
   padding: 20px;
 }
 
@@ -70,11 +78,12 @@
   flex-direction: column;
   gap: 12px;
   margin-top: auto;
+  max-width: 75%;
 }
 
 .reel-description {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.95rem;
   line-height: 1.4;
   color: white;
   font-weight: 500;
@@ -126,11 +135,12 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  background: 0;
+  border: none;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  padding: 0;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
@@ -139,8 +149,8 @@
 }
 
 .reel-action-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
+  background: none;
+  transform: scale(-2px);
 }
 
 .reel-action-btn:active {
@@ -161,6 +171,15 @@
 .like-btn.liked {
   background: rgba(255, 90, 95, 0.3);
   border-color: var(--primary);
+}
+
+.like-btn:hover svg {
+  fill: #ff5a5f;
+  stroke: #ff5a5f;
+}
+
+save-btn:hover svg {
+  fill: #ffffff;
 }
 
 /* Empty State */

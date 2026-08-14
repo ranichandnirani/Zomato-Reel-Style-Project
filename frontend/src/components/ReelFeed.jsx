@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
+import { Heart, Bookmark, Share2 } from 'lucide-react'
 import '../styles/reels.css'
 
 const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
@@ -16,17 +17,14 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
       const index = Math.round(scrollPosition / itemHeight)
       setActiveIndex(index)
 
-      // Pause all videos
       videoRefs.current.forEach((video) => {
         if (video) video.pause()
+          
       })
 
-      // Play active video
       const activeVideo = videoRefs.current.get(index)
       if (activeVideo) {
-        activeVideo.play().catch(() => {
-          // Handle autoplay restrictions
-        })
+        activeVideo.play().catch(() => {})
       }
     }
 
@@ -52,21 +50,21 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
                 if (el) videoRefs.current.set(index, el)
                 else videoRefs.current.delete(index)
               }}
-              src={item.src || item.url}
+              src={item.video || item.src || item.url}
               className="reel-video"
               loop
               muted
               playsInline
               autoPlay={index === 0}
+              
             />
+            
           </div>
 
           <div className="reel-overlay">
             <div className="reel-info">
               <p className="reel-description">{item.description}</p>
-              <button className="reel-button">
-                Visit store
-              </button>
+              <button className="reel-button">Visit store</button>
             </div>
 
             <div className="reel-actions">
@@ -75,7 +73,7 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
                 onClick={() => onLike && onLike(item)}
                 title="Like"
               >
-                <span className="action-icon">❤️</span>
+                <Heart size={24} strokeWidth={2} />
                 <span className="action-count">{item.likeCount || 0}</span>
               </button>
 
@@ -84,12 +82,12 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
                 onClick={() => onSave && onSave(item)}
                 title="Save"
               >
-                <span className="action-icon">💾</span>
+                <Bookmark size={24} strokeWidth={2} />
                 <span className="action-count">{item.savesCount || 0}</span>
               </button>
 
               <button className="reel-action-btn share-btn" title="Share">
-                <span className="action-icon">🔗</span>
+                <Share2 size={24} strokeWidth={2} />
               </button>
             </div>
           </div>
