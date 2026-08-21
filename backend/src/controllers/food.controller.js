@@ -26,14 +26,92 @@ async function createFood(req, res) {
 
 async function getFoodItems(req, res) {
     const foodItems = await foodModel.find({})
+
+    const userId = req.user?._id?.toString()
+
+    // attach isLiked/isSaved for the current user so the frontend
+    // doesn't lose that state on every poll/refresh
+    const itemsWithUserState = foodItems.map((item) => {
+        const obj = item.toObject()
+        return {
+            ...obj,
+            isLiked: userId ? (obj.likedBy || []).some((id) => id.toString() === userId) : false,
+            isSaved: userId ? (obj.savedBy || []).some((id) => id.toString() === userId) : false,
+        }
+    })
+
     res
      .status(200)
      .json({
         message: "Food item fetched successfully.",
-        foodItems
+        foodItems: itemsWithUserState
      })
 }
+
+async function likeFood(req, res) {
+    const { foodId } = req.body;
+    const userId = req.user._id;
+
+    const food = await foodModel.findById(foodId);
+    if (!food) {
+        return res.status(404).json({ message: "Food item not found." });
+    }
+
+    if (!food.likedBy) food.likedBy = []
+
+    const alreadyLiked = food.likedBy.some(id => id.toString() === userId.toString());
+
+    if (alreadyLiked) {
+        food.likedBy.pull(userId);
+        food.likeCount = Math.max((food.likeCount || 0) - 1, 0);
+    } else {
+        food.likedBy.push(userId);
+        food.likeCount = (food.likeCount || 0) + 1;
+    }
+
+    await food.save();
+
+    res.status(200).json({
+        message: alreadyLiked ? "Food unliked." : "Food liked.",
+        like: !alreadyLiked,
+        likeCount: food.likeCount
+    });
+}
+
+async function saveFood(req, res) {
+    const { foodId } = req.body;
+    const userId = req.user._id;
+
+    const food = await foodModel.findById(foodId);
+    if (!food) {
+        return res.status(404).json({ message: "Food item not found." });
+    }
+
+    if (!food.savedBy) food.savedBy = []
+
+    const alreadySaved = food.savedBy.some(id => id.toString() === userId.toString());
+
+    if (alreadySaved) {
+        food.savedBy.pull(userId);
+        food.savesCount = Math.max((food.savesCount || 0) - 1, 0);
+    } else {
+        food.savedBy.push(userId);
+        food.savesCount = (food.savesCount || 0) + 1;
+    }
+
+    await food.save();
+
+    res.status(200).json({
+        message: alreadySaved ? "Food unsaved." : "Food saved.",
+        save: !alreadySaved,
+        savesCount: food.savesCount
+    });
+}
+
+
 module.exports = {
     createFood,
-    getFoodItems
+    getFoodItems,
+    likeFood,
+    saveFood
 }

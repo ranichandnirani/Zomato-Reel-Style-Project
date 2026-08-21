@@ -8,11 +8,10 @@ const Home = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/food', { withCredentials: true })
+      const response = await axios.get('http://localhost:3000/api/food',
+        { withCredentials: true }
+      )
       const foodItems = Array.isArray(response.data?.foodItems) ? response.data.foodItems : []
-
-      console.log(foodItems)
-
       setVideos(foodItems)
     } catch (error) {
       setVideos([])
@@ -35,23 +34,49 @@ const Home = () => {
   }, [])
 
   async function likeVideo(item) {
-    const response = await axios.post('http://localhost:3000/api/food/like', { foodId: item._id }, { withCredentials: true })
+    const response = await axios.post(
+      'http://localhost:3000/api/food/like',
+      { foodId: item._id },
+      { withCredentials: true }
+    )
 
-    if (response.data.like) {
-      setVideos((prev) => prev.map((video) => video._id === item._id ? { ...video, likeCount: (video.likeCount || 0) + 1 } : video))
-    } else {
-      setVideos((prev) => prev.map((video) => video._id === item._id ? { ...video, likeCount: Math.max((video.likeCount || 0) - 1, 0) } : video))
-    }
+    const nowLiked = response.data.like
+
+    setVideos((prev) =>
+      prev.map((video) =>
+        video._id === item._id
+          ? {
+              ...video,
+              isLiked: nowLiked,
+              // derive the count from the toggle direction, don't depend on
+              // the backend sending likeCount back
+              likeCount: Math.max((video.likeCount || 0) + (nowLiked ? 1 : -1), 0),
+            }
+          : video
+      )
+    )
   }
 
   async function saveVideo(item) {
-    const response = await axios.post('http://localhost:3000/api/food/save', { foodId: item._id }, { withCredentials: true })
+    const response = await axios.post(
+      'http://localhost:3000/api/food/save',
+      { foodId: item._id },
+      { withCredentials: true }
+    )
 
-    if (response.data.save) {
-      setVideos((prev) => prev.map((video) => video._id === item._id ? { ...video, savesCount: (video.savesCount || 0) + 1 } : video))
-    } else {
-      setVideos((prev) => prev.map((video) => video._id === item._id ? { ...video, savesCount: Math.max((video.savesCount || 0) - 1, 0) } : video))
-    }
+    const nowSaved = response.data.save
+
+    setVideos((prev) =>
+      prev.map((video) =>
+        video._id === item._id
+          ? {
+              ...video,
+              isSaved: nowSaved,
+              savesCount: Math.max((video.savesCount || 0) + (nowSaved ? 1 : -1), 0),
+            }
+          : video
+      )
+    )
   }
 
   return (

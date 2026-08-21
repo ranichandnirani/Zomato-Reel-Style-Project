@@ -13,7 +13,7 @@ async function registerUser(req, res) {
         return res
             .status(400)
             .json({
-                massage: "User already exists"
+                message: "User already exists"
             })
     }
     const hashPassword = await bcrypt.hash(password, 10);
@@ -32,11 +32,11 @@ async function registerUser(req, res) {
     res
      .status(201)
      .json({
-            massage: "User registered successfully",
+            message: "User registered successfully",
             user: {
                 _id: user._id,
                 email: user.email,
-                name: user.name
+                name: user.fullName
             } 
      })   
 
@@ -79,11 +79,11 @@ async function loginUser(req, res) {
     res
      .status(201)
      .json({
-        massage: "User registered successfully",
+        message: "User registered successfully",
         user: {
             _id: user._id,
             email: user.email,
-            name: user.name
+            name: user.fullName
         } 
      })   
 }
@@ -131,7 +131,7 @@ async function registerFoodPartner(req, res) {
     res
      .status(201)
      .json({
-        massage: "Food partner registered successfully",
+        message: "Food partner registered successfully",
         user: {
             _id: foodPartner._id,
             email: foodPartner.email,

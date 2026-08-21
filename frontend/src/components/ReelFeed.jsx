@@ -6,6 +6,7 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
   const containerRef = useRef(null)
   const videoRefs = useRef(new Map())
   const [activeIndex, setActiveIndex] = useState(0)
+  const [pendingIds, setPendingIds] = useState(new Set())
 
   useEffect(() => {
     const container = containerRef.current
@@ -19,7 +20,6 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
 
       videoRefs.current.forEach((video) => {
         if (video) video.pause()
-          
       })
 
       const activeVideo = videoRefs.current.get(index)
@@ -31,6 +31,34 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
     container.addEventListener('scroll', handleScroll)
     return () => container.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLike = async (item) => {
+    if (pendingIds.has(item._id)) return
+    setPendingIds((prev) => new Set(prev).add(item._id))
+    try {
+      if (onLike) await onLike(item)
+    } finally {
+      setPendingIds((prev) => {
+        const next = new Set(prev)
+        next.delete(item._id)
+        return next
+      })
+    }
+  }
+
+  const handleSave = async (item) => {
+    if (pendingIds.has(item._id)) return
+    setPendingIds((prev) => new Set(prev).add(item._id))
+    try {
+      if (onSave) await onSave(item)
+    } finally {
+      setPendingIds((prev) => {
+        const next = new Set(prev)
+        next.delete(item._id)
+        return next
+      })
+    }
+  }
 
   if (!items || items.length === 0) {
     return (
@@ -55,10 +83,9 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
               loop
               muted
               playsInline
-              autoPlay={index === 0}
-              
+              preload='metadata'
+              autoPlay
             />
-            
           </div>
 
           <div className="reel-overlay">
@@ -70,19 +97,29 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
             <div className="reel-actions">
               <button
                 className="reel-action-btn like-btn"
-                onClick={() => onLike && onLike(item)}
+                onClick={() => handleLike(item)}
                 title="Like"
               >
-                <Heart size={24} strokeWidth={2} />
+                <Heart
+                  size={24}
+                  strokeWidth={2}
+                  fill={item.isLiked ? '#ff4d4f' : 'none'}
+                  color={item.isLiked ? '#ff4d4f' : 'currentColor'}
+                />
                 <span className="action-count">{item.likeCount || 0}</span>
               </button>
 
               <button
                 className="reel-action-btn save-btn"
-                onClick={() => onSave && onSave(item)}
+                onClick={() => handleSave(item)}
                 title="Save"
               >
-                <Bookmark size={24} strokeWidth={2} />
+                <Bookmark
+                  size={24}
+                  strokeWidth={2}
+                  fill={item.isSaved ? '#ffd700' : 'none'}
+                  color={item.isSaved ? '#ffd700' : 'currentColor'}
+                />
                 <span className="action-count">{item.savesCount || 0}</span>
               </button>
 
