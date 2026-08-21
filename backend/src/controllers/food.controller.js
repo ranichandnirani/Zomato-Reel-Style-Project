@@ -1,4 +1,4 @@
-// const { router } = require('../app.js');
+const { router } = require('../app.js');
 const foodModel = require('../models/food.model.js');
 const storageService = require("../services/storage.service.js");
 const { v4: uuid } = require('uuid');

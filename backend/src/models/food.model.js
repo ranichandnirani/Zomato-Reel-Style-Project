@@ -24,14 +24,15 @@ const foodSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    likedBy: {
+    likedBy: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
-    },
-    savedBy: {
+    }],
+    savedBy: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
-    }
+    }]
+    
 })
 
 const foodModel = mongoose.model("food", foodSchema);
