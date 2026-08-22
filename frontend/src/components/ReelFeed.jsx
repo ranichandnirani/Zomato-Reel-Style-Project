@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Heart, Bookmark, Share2 } from 'lucide-react'
 import '../styles/reels.css'
 
@@ -7,6 +8,7 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
   const videoRefs = useRef(new Map())
   const [activeIndex, setActiveIndex] = useState(0)
   const [pendingIds, setPendingIds] = useState(new Set())
+  const navigate = useNavigate()
 
   useEffect(() => {
     const container = containerRef.current
@@ -60,6 +62,19 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
     }
   }
 
+  const handleVisitStore = (item) => {
+    // foodPartner may come through as a raw ObjectId string, or as a
+    // populated object ({ _id, name, ... }) if the backend route ever
+    // starts using .populate('foodPartner') - handle both.
+    const partnerId =
+      typeof item.foodPartner === 'object' && item.foodPartner !== null
+        ? item.foodPartner._id
+        : item.foodPartner
+
+    if (!partnerId) return
+    navigate(`/food-partner/${partnerId}`)
+  }
+
   if (!items || items.length === 0) {
     return (
       <div className="reel-feed-empty">
@@ -91,7 +106,9 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
           <div className="reel-overlay">
             <div className="reel-info">
               <p className="reel-description">{item.description}</p>
-              <button className="reel-button">Visit store</button>
+              <button className="reel-button" onClick={() => handleVisitStore(item)}>
+                Visit store
+              </button>
             </div>
 
             <div className="reel-actions">

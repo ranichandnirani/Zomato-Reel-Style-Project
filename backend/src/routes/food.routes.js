@@ -15,22 +15,23 @@ router.post('/',
     foodController.createFood
 ) //first req sent to middleware then , when the next() function called, req farword to controller. .createFood set foodPartner's value
 
-// calling API(GET /api/food/ [protected]) for user
+// calling API(GET /api/food/ [public, but personalized if a user is logged in])
 router.get('/',
-    authMiddleware.authUserMiddleware,
+    authMiddleware.optionalAuthUserMiddleware,
     foodController.getFoodItems
 )
 
-// like a food item 
+// like a food item (requires a logged-in user)
 router.post('/like',
     authMiddleware.authUserMiddleware,
     foodController.likeFood
 )
 
-// save a food item
+// save a food item (requires a logged-in user)
 router.post('/save',
     authMiddleware.authUserMiddleware,
     foodController.saveFood
 )
+
 
 module.exports = router;

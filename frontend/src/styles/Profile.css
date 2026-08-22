@@ -1,0 +1,105 @@
+.profile-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #111520;
+  padding: 24px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.profile-top-card {
+  width: 100%;
+  max-width: 400px;
+  background: #1e2638;
+  border-radius: 12px;
+  padding: 24px 40px;
+  box-sizing: border-box;
+  margin-bottom: 24px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 24px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #1e2638;
+  border: 2px solid #2a344d;
+  flex-shrink: 0;
+}
+
+.profile-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.profile-badge {
+  background: #2a344d;
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.profile-divider {
+  width: 100%;
+  border: 0;
+  border-top: 1px dotted #3b4661;
+  margin-bottom: 20px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+}
+
+.profile-stat-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  color: #8e95a5;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.stat-value {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.profile-video-grid {
+  width: 100%;
+  max-width: 400px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.video-grid-item {
+  background: #1e2638;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8e95a5;
+  font-size: 1rem;
+  /* border-radius: 8px; */
+}
