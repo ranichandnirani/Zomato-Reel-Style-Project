@@ -56,10 +56,24 @@
 .profile-divider {
   width: 100%;
   border: 0;
-  border-top: 1px dotted #3b4661;
+  border-top: 1px solid #3b4661;
   margin-bottom: 20px;
 }
 
+.profile-sep {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 20px;
+  border: 0;
+  border-top: 1px dotted #3b4661;
+}
+
+.profile-sep {
+  width: 100%;
+  border: 0;
+  border-top: 1px dotted #3b4661;
+  margin-bottom: 20px;
+}
 .profile-stats {
   display: flex;
   justify-content: space-around;
@@ -89,8 +103,8 @@
   width: 100%;
   max-width: 400px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
 }
 
 .video-grid-item {
@@ -101,5 +115,5 @@
   justify-content: center;
   color: #8e95a5;
   font-size: 1rem;
-  /* border-radius: 8px; */
+  /* border-radius: 4px; */
 }

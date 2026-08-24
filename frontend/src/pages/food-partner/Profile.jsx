@@ -8,11 +8,13 @@ function Profile() {
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(false);
+  const [ videos, setVideos ] = useState([])
 
   useEffect(() => {
     axios.get(`http://localhost:3000/api/food-partner/${id}`, { withCredentials: true })
       .then(response => {
         setProfile(response.data.foodPartner)
+        setVideos(response.data.foodItems)
       })
       .catch(() => {
         setError(true)
@@ -51,11 +53,15 @@ function Profile() {
           </div>
         </div>
       </div>
-
+      <hr className="profile-sep"  />
       <div className="profile-video-grid">
-        {(profile.foods || []).map((video) => (
+        {(profile.foodItems || []).map((video) => (
           <div key={video._id} className="video-grid-item">
-            video
+            <video 
+              style={{objectFit:'cover', width: '100%', height:'100%'}} 
+              src={video.video} muted>
+                Video
+            </video>
           </div>
         ))}
       </div>

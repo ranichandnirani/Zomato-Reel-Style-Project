@@ -25,7 +25,16 @@ const foodpartnerSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true
-    }
+    },
+    customersServed: {
+        type: Number,
+        default: 0
+    },
+    foods: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "food"
+    }]
+
 })
 
 const foodpartnerModel = mongoose.model("foodpartner", foodpartnerSchema)
