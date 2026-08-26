@@ -28,8 +28,9 @@
 }
 
 .profile-avatar {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
   border-radius: 50%;
   background: #1e2638;
   border: 2px solid #2a344d;
@@ -62,17 +63,10 @@
 
 .profile-sep {
   width: 100%;
-  max-width: 400px;
+  max-width: 900px; 
   margin: 0 auto 20px;
   border: 0;
-  border-top: 1px dotted #3b4661;
-}
-
-.profile-sep {
-  width: 100%;
-  border: 0;
-  border-top: 1px dotted #3b4661;
-  margin-bottom: 20px;
+  border-top: 1px solid #3b4661;
 }
 .profile-stats {
   display: flex;
@@ -88,32 +82,87 @@
 
 .stat-label {
   color: #8e95a5;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 500;
   text-transform: capitalize;
 }
 
 .stat-value {
   color: #ffffff;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .profile-video-grid {
   width: 100%;
-  max-width: 400px;
+  max-width: 900px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 3px;
 }
 
 .video-grid-item {
   background: #1e2638;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #8e95a5;
-  font-size: 1rem;
-  /* border-radius: 4px; */
+  font-size: 1.5rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .profile-header { 
+    grid-template-columns: 96px 1fr;
+  }
+  .profile-avatar { 
+    width: 96px; height: 96px; 
+  }
+  .profile-video-grid { 
+    max-width: 700px; 
+  }
+  .profile-sep {
+    max-width: 700px;
+  }
+}
+
+/* @media (max-width: 680px) {
+  .profile-video-grid { max-width: 100%; }
+} */
+
+@media (max-width: 420px) {
+  .profile-container { 
+    padding: 16px 12px; 
+  }
+  .profile-top-card { 
+    grid-template-columns: 72px 1fr; 
+  }
+  .profile-header { 
+    gap: 16px; 
+  }
+  .profile-avatar { 
+    width: 72px; 
+    height: 72px; 
+  }
+  .profile-badge 
+  { padding: 4px 10px; 
+    font-size: 0.7rem; 
+  }
+  .stat-label { 
+    font-size: 1rem; 
+  }
+  .stat-value { 
+    font-size: 1.5rem; 
+  }
+  .profile-video-grid { 
+    gap: 2px; 
+  }
+  .profile-video-grid { 
+    max-width: 100%;
+  }
+  .profile-sep {
+    max-width: 100%;
+  }
 }

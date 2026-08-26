@@ -3,16 +3,20 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 function CreateFood() {
+  
   const navigate = useNavigate()
+
   const [form, setForm] = useState({
     name: '',
     description: '',
     video: null
   })
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handleChange = (event) => {
+
     const { name, value, files } = event.target
 
     if (name === 'video') {
@@ -27,8 +31,10 @@ function CreateFood() {
     event.preventDefault()
 
     if (!form.name || !form.video) {
+
       setError('Please enter a food name and select a video.')
       return
+
     }
 
     const formData = new FormData()
@@ -37,6 +43,7 @@ function CreateFood() {
     formData.append('video', form.video)
 
     try {
+
       setLoading(true)
       setError('')
 
@@ -49,6 +56,7 @@ function CreateFood() {
 
       window.dispatchEvent(new Event('food-uploaded'))
       navigate('/')
+
     } catch (err) {
       setError(err?.response?.data?.message || 'Failed to upload food video.')
     } finally {
@@ -104,13 +112,65 @@ function CreateFood() {
 
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: '#d8d8d8' }}>Video file</label>
-            <input
-              type="file"
-              name="video"
-              accept="video/*"
-              onChange={handleChange}
-              style={{ width: '100%', padding: '12px 14px', borderRadius: '10px', border: '1px solid #2a2d35', background: '#17191f', color: '#fff' }}
-            />
+            {!form.video ? (
+              <input
+                type="file"
+                name="video"
+                accept="video/*"
+                onChange={handleChange}
+                style={{ width: '100%', padding: '12px 14px', borderRadius: '10px', border: '1px solid #2a2d35', background: '#17191f', color: '#fff' }}
+              />
+            ) : (
+              <div style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1px solid #2a2d35',
+                background: '#17191f',
+                color: '#fff',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
+                    <video
+                      src={URL.createObjectURL(form.video)}
+                      style={{ width: '48px', height: '48px', borderRadius: '6px', objectFit: 'cover', backgroundColor: '#000' }}
+                      muted
+                      loop
+                      autoPlay
+                    />
+                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#d8d8d8' }}>
+                      {form.video.name}
+                    </span>
+                  </div>
+                  {form.video.size && (
+                    <span style={{ color: '#888', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
+                      {(form.video.size / (1024 * 1024)).toFixed(1)} MB
+                    </span>
+                  )}
+                </div>
+                <div style={{ display: 'flex', gap: '16px', fontSize: '0.9rem' }}>
+                  <label style={{ color: '#4a90e2', cursor: 'pointer', fontWeight: 600 }}>
+                    Change
+                    <input
+                      type="file"
+                      name="video"
+                      accept="video/*"
+                      onChange={handleChange}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                  <span
+                    onClick={() => setForm((prev) => ({ ...prev, video: null }))}
+                    style={{ color: '#ff6b6b', cursor: 'pointer', fontWeight: 600 }}
+                  >
+                    Remove
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {error && (

@@ -83,10 +83,10 @@
 
 .reel-description {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.4;
   color: white;
-  font-weight: 500;
+  font-weight: 400;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -98,13 +98,13 @@
 
 .reel-button {
   align-self: flex-start;
-  padding: 10px 24px;
+  padding: 8px 20px;
   border: none;
   border-radius: 24px;
   background: linear-gradient(135deg, var(--primary), var(--primary-strong));
   color: white;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(255, 90, 95, 0.3);
@@ -180,6 +180,7 @@
 
 save-btn:hover svg {
   fill: #ffffff;
+  stroke: #ffffff;
 }
 
 /* Empty State */

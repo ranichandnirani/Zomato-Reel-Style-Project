@@ -86,8 +86,8 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
   return (
     <div className="reel-feed-container" ref={containerRef}>
       {items.map((item, index) => (
-        <div key={item._id || index} className="reel-item">
-          <div className="reel-video-wrapper">
+        <div key={item._id || index} className="reel-item" style={{ background: '#000' }}>
+          <div className="reel-video-wrapper" style={{ position: 'relative', width: '100%', maxWidth: '500px', height: '100vh', margin: '0 auto' }}>
             <video
               ref={(el) => {
                 if (el) videoRefs.current.set(index, el)
@@ -101,48 +101,48 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
               preload='metadata'
               autoPlay
             />
-          </div>
 
-          <div className="reel-overlay">
-            <div className="reel-info">
-              <p className="reel-description">{item.description}</p>
-              <button className="reel-button" onClick={() => handleVisitStore(item)}>
-                Visit store
-              </button>
-            </div>
+            <div className="reel-overlay">
+              <div className="reel-info">
+                <p className="reel-description">{item.description}</p>
+                <button className="reel-button" onClick={() => handleVisitStore(item)}>
+                  Visit store
+                </button>
+              </div>
 
-            <div className="reel-actions">
-              <button
-                className="reel-action-btn like-btn"
-                onClick={() => handleLike(item)}
-                title="Like"
-              >
-                <Heart
-                  size={24}
-                  strokeWidth={2}
-                  fill={item.isLiked ? '#ff4d4f' : 'none'}
-                  color={item.isLiked ? '#ff4d4f' : 'currentColor'}
-                />
-                <span className="action-count">{item.likeCount || 0}</span>
-              </button>
+              <div className="reel-actions">
+                <button
+                  className="reel-action-btn like-btn"
+                  onClick={() => handleLike(item)}
+                  title="Like"
+                >
+                  <Heart
+                    size={24}
+                    strokeWidth={2}
+                    fill={item.isLiked ? '#ff4d4f' : 'none'}
+                    color={item.isLiked ? '#ff4d4f' : 'currentColor'}
+                  />
+                  <span className="action-count">{item.likeCount || 0}</span>
+                </button>
 
-              <button
-                className="reel-action-btn save-btn"
-                onClick={() => handleSave(item)}
-                title="Save"
-              >
-                <Bookmark
-                  size={24}
-                  strokeWidth={2}
-                  fill={item.isSaved ? '#ffd700' : 'none'}
-                  color={item.isSaved ? '#ffd700' : 'currentColor'}
-                />
-                <span className="action-count">{item.savesCount || 0}</span>
-              </button>
+                <button
+                  className="reel-action-btn save-btn"
+                  onClick={() => handleSave(item)}
+                  title="Save"
+                >
+                  <Bookmark
+                    size={24}
+                    strokeWidth={2}
+                    fill={item.isSaved ? '#ffffff' : 'none'}
+                    color={item.isSaved ? '#ffffff' : 'currentColor'}
+                  />
+                  <span className="action-count">{item.savesCount || 0}</span>
+                </button>
 
-              <button className="reel-action-btn share-btn" title="Share">
-                <Share2 size={24} strokeWidth={2} />
-              </button>
+                <button className="reel-action-btn share-btn" title="Share">
+                  <Share2 size={24} strokeWidth={2} />
+                </button>
+              </div>
             </div>
           </div>
         </div>

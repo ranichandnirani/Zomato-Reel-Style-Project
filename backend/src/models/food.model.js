@@ -26,11 +26,13 @@ const foodSchema = new mongoose.Schema({
     },
     likedBy: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "user",
+        required: true
     }],
     savedBy: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "user",
+        required: true
     }]
     
 })

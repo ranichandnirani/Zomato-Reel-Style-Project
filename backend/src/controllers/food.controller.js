@@ -54,7 +54,10 @@ async function likeFood(req, res) {
 
     const food = await foodModel.findById(foodId);
     if (!food) {
-        return res.status(404).json({ message: "Food item not found." });
+        return res.status(404)
+        .json({ 
+            message: "Food item not found." 
+        });
     }
 
     if (!food.likedBy) food.likedBy = []
