@@ -1,20 +1,22 @@
+@import './theme.css';
+
 .profile-container {
   width: 100%;
   min-height: 100vh;
-  background: #111520;
+  background: var(--bg-dark);
   padding: 24px 16px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-family);
 }
 
 .profile-top-card {
   width: 100%;
   max-width: 400px;
-  background: #1e2638;
-  border-radius: 12px;
+  background: var(--surface-card);
+  border-radius: var(--radius-md);
   padding: 24px 40px;
   box-sizing: border-box;
   margin-bottom: 24px;
@@ -32,8 +34,8 @@
   height: 120px;
   object-fit: cover;
   border-radius: 50%;
-  background: #1e2638;
-  border: 2px solid #2a344d;
+  background: var(--surface-card);
+  border: 2px solid var(--divider);
   flex-shrink: 0;
 }
 
@@ -45,10 +47,10 @@
 }
 
 .profile-badge {
-  background: #2a344d;
-  color: #ffffff;
+  background: var(--divider);
+  color: var(--text-white);
   padding: 6px 14px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 500;
   text-align: center;
@@ -57,7 +59,7 @@
 .profile-divider {
   width: 100%;
   border: 0;
-  border-top: 1px solid #3b4661;
+  border-top: 1px solid var(--divider);
   margin-bottom: 20px;
 }
 
@@ -66,7 +68,7 @@
   max-width: 900px; 
   margin: 0 auto 20px;
   border: 0;
-  border-top: 1px solid #3b4661;
+  border-top: 1px solid var(--divider);
 }
 .profile-stats {
   display: flex;
@@ -81,14 +83,14 @@
 }
 
 .stat-label {
-  color: #8e95a5;
+  color: var(--muted-light);
   font-size: 1rem;
   font-weight: 500;
   text-transform: capitalize;
 }
 
 .stat-value {
-  color: #ffffff;
+  color: var(--text-white);
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -103,12 +105,12 @@
 }
 
 .video-grid-item {
-  background: #1e2638;
+  background: var(--surface-card);
   aspect-ratio: 3 / 4;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8e95a5;
+  color: var(--muted-light);
   font-size: 1.5rem;
 }
 
@@ -127,10 +129,6 @@
     max-width: 700px;
   }
 }
-
-/* @media (max-width: 680px) {
-  .profile-video-grid { max-width: 100%; }
-} */
 
 @media (max-width: 420px) {
   .profile-container { 

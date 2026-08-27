@@ -1,0 +1,144 @@
+/* ============================================================
+   theme.css — Single source of truth for all design tokens.
+   Import this file at the top of every other CSS file with:
+       @import './theme.css';
+   ============================================================ */
+
+/* ---------- Light Theme (default) ---------- */
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --primary: #ff5a5f;
+  --primary-strong: #e6454a;
+  --primary-glow: rgba(255, 90, 95, 0.30);
+  --primary-tint: rgba(255, 90, 95, 0.12);
+
+  /* Backgrounds */
+  --bg: #f5f7fb;
+  --bg-dark: #111520;
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-strong: #ffffff;
+  --surface-card: #1e2638;
+
+  /* Text */
+  --text: #162033;
+  --text-white: #ffffff;
+  --text-comh3: #ff5a5f;
+  --muted: #667085;
+  --muted-light: #8e95a5;
+
+  /* Borders & dividers */
+  --border: rgba(15, 23, 42, 0.12);
+  --divider: #3b4661;
+
+  /* Elevation */
+  --shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+  --shadow-btn: 0 4px 12px rgba(255, 90, 95, 0.3);
+  --shadow-btn-hover: 0 6px 16px rgba(255, 90, 95, 0.4);
+
+  /* Accents (action-specific) */
+  --like-color: #ff4d4f;
+  --save-color: #ffffff;
+  --action-text: #ffffff;
+
+  /* Misc */
+  --overlay-gradient: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  --font-family: Inter, "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Bottom nav */
+  --bottom-nav-height: 60px;
+  --bottom-nav-bg: rgba(255, 255, 255, 0.96);
+  --bottom-nav-border: rgba(15, 23, 42, 0.08);
+  --bottom-nav-active: var(--primary);
+  --bottom-nav-inactive: #667085;
+}
+
+/* ---------- Dark Theme ---------- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0f172a;
+  --bg-dark: #0a0e19;
+  --surface: rgba(15, 23, 42, 0.88);
+  --surface-strong: #111827;
+  --surface-card: #1e2638;
+
+  --text: #f8fafc;
+  --text-white: #ff5a5f;
+  --muted: #94a3b8;
+  --muted-light: #8e95a5;
+
+  --border: rgba(226, 232, 240, 0.14);
+  --divider: #3b4661;
+
+  --primary: #ff7a7f;
+  --primary-strong: #ff5a5f;
+  --primary-glow: rgba(255, 90, 95, 0.35);
+  --primary-tint: rgba(255, 90, 95, 0.16);
+
+  --shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
+  --shadow-btn: 0 4px 12px rgba(255, 90, 95, 0.25);
+  --shadow-btn-hover: 0 6px 16px rgba(255, 90, 95, 0.35);
+
+  --overlay-gradient: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+
+  --bottom-nav-bg: rgba(15, 23, 42, 0.96);
+  --bottom-nav-border: rgba(226, 232, 240, 0.10);
+  --bottom-nav-active: var(--primary);
+  --bottom-nav-inactive: #94a3b8;
+}
+
+/* ---------- System preference fallback ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --bg: #0f172a;
+    --bg-dark: #0a0e19;
+    --surface: rgba(15, 23, 42, 0.88);
+    --surface-strong: #111827;
+    --surface-card: #1e2638;
+
+    --text: #f8fafc;
+    --text-white: #ffffff;
+    --muted: #94a3b8;
+    --muted-light: #8e95a5;
+
+    --border: rgba(226, 232, 240, 0.14);
+    --divider: #3b4661;
+
+    --primary: #ff7a7f;
+    --primary-strong: #ff5a5f;
+    --primary-glow: rgba(255, 90, 95, 0.35);
+    --primary-tint: rgba(255, 90, 95, 0.16);
+
+    --shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
+    --shadow-btn: 0 4px 12px rgba(255, 90, 95, 0.25);
+    --shadow-btn-hover: 0 6px 16px rgba(255, 90, 95, 0.35);
+
+    --overlay-gradient: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+
+    --bottom-nav-bg: rgba(15, 23, 42, 0.96);
+    --bottom-nav-border: rgba(226, 232, 240, 0.10);
+    --bottom-nav-active: var(--primary);
+    --bottom-nav-inactive: #94a3b8;
+  }
+}
+
+/* ---------- Global resets using variables ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.25s ease, color 0.25s ease;
+}

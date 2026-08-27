@@ -1,3 +1,5 @@
+@import './styles/theme.css';
+
 .global-theme-toggle {
   position: fixed;
   top: 20px;
@@ -9,7 +11,7 @@
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 10px 14px;
   font-size: 0.9rem;
   font-weight: 700;

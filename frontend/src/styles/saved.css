@@ -1,0 +1,146 @@
+@import './theme.css';
+
+.saved-page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  padding-bottom: calc(var(--bottom-nav-height) + 16px);
+}
+
+.saved-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  backdrop-filter: blur(12px);
+  padding: 20px 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.saved-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.saved-header p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Grid of saved items */
+.saved-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 2px;
+}
+
+.saved-grid-item {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: var(--surface-card);
+  cursor: pointer;
+}
+
+.saved-grid-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.saved-grid-item__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.saved-grid-item__overlay span {
+  color: var(--text-white);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Empty saved state */
+.saved-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  color: var(--muted);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.saved-empty svg {
+  opacity: 0.4;
+}
+
+.saved-empty h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.saved-empty p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Loading state */
+.saved-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .saved-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    padding: 1px;
+  }
+
+  .saved-header {
+    padding: 16px 12px 10px;
+  }
+
+  .saved-header h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .saved-grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 900px;
+    margin: 0 auto;
+    gap: 4px;
+    padding: 16px;
+  }
+
+  .saved-page {
+    padding-bottom: 16px;
+  }
+}

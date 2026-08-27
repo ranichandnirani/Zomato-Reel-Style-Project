@@ -33,5 +33,20 @@ router.post('/save',
     foodController.saveFood
 )
 
+// get saved items for the logged-in user
+router.get('/saved',
+    authMiddleware.authUserMiddleware,
+    foodController.getSavedItems
+)
 
+router.post('/comment',
+    authMiddleware.authUserMiddleware,
+    foodController.addComment
+)
+ 
+// get comments for a food item
+router.get('/comments/:id',
+    authMiddleware.authUserMiddleware,
+    foodController.getComments
+)
 module.exports = router;

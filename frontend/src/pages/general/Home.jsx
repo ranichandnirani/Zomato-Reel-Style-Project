@@ -71,8 +71,8 @@ const Home = () => {
         video._id === item._id
           ? {
               ...video,
-              isSaved: nowSaved,
-              savesCount: Math.max((video.savesCount || 0) + (nowSaved ? 1 : -1), 0),
+              save: nowSaved,
+              saveCount: Math.max((video.saveCount || 0) + (nowSaved ? 1 : -1), 0),
             }
           : video
       )

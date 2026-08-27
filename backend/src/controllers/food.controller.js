@@ -1,14 +1,14 @@
 const { router } = require('../app.js');
 const foodModel = require('../models/food.model.js');
+const likeModel = require('../models/likes.model.js');
+const saveModel = require('../models/save.model.js');
 const storageService = require("../services/storage.service.js");
 const { v4: uuid } = require('uuid');
 
 async function createFood(req, res) {
 
     const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid())
-    // console.log(fileUploadResult);
 
-    //created food items
     const foodItem = await foodModel.create({
         name: req.body.name,
         description: req.body.description,
@@ -29,14 +29,27 @@ async function getFoodItems(req, res) {
 
     const userId = req.user?._id?.toString()
 
-    // attach isLiked/isSaved for the current user so the frontend
-    // doesn't lose that state on every poll/refresh
+    let likedSet = new Set()
+    let savedSet = new Set()
+
+    if (userId) {
+        const foodIds = foodItems.map((item) => item._id)
+
+        const [likes, saves] = await Promise.all([
+            likeModel.find({ user: userId, food: { $in: foodIds } }),
+            saveModel.find({ user: userId, food: { $in: foodIds } }),
+        ])
+
+        likedSet = new Set(likes.map((l) => l.food.toString()))
+        savedSet = new Set(saves.map((s) => s.food.toString()))
+    }
+
     const itemsWithUserState = foodItems.map((item) => {
         const obj = item.toObject()
         return {
             ...obj,
-            isLiked: userId ? (obj.likedBy || []).some((id) => id.toString() === userId) : false,
-            isSaved: userId ? (obj.savedBy || []).some((id) => id.toString() === userId) : false,
+            like: likedSet.has(obj._id.toString()),
+            save: savedSet.has(obj._id.toString()),
         }
     })
 
@@ -50,71 +63,186 @@ async function getFoodItems(req, res) {
 
 async function likeFood(req, res) {
     const { foodId } = req.body;
-    const userId = req.user._id;
+    const user = req.user;
 
-    const food = await foodModel.findById(foodId);
-    if (!food) {
-        return res.status(404)
-        .json({ 
-            message: "Food item not found." 
+    const isAlreadyLiked = await likeModel.findOne({
+        user: user._id,
+        food: foodId
+    })
+
+    if (isAlreadyLiked) {
+        await likeModel.deleteOne({
+            user: user._id,
+            food: foodId
         });
+
+        const updated = await foodModel.findByIdAndUpdate(
+            foodId,
+            { $inc: { likeCount: -1 } },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            message: "Food item unliked successfully.",
+            like: false,
+            likeCount: updated?.likeCount ?? 0
+        })
     }
 
-    if (!food.likedBy) food.likedBy = []
+    await likeModel.create({
+        user: user._id,
+        food: foodId
+    })
 
-    const alreadyLiked = food.likedBy.some(id => id.toString() === userId.toString());
+    const updated = await foodModel.findByIdAndUpdate(
+        foodId,
+        { $inc: { likeCount: 1 } },
+        { new: true }
+    );
 
-    if (alreadyLiked) {
-        food.likedBy.pull(userId);
-        food.likeCount = Math.max((food.likeCount || 0) - 1, 0);
-    } else {
-        food.likedBy.push(userId);
-        food.likeCount = (food.likeCount || 0) + 1;
-    }
-
-    await food.save();
-
-    res.status(200).json({
-        message: alreadyLiked ? "Food unliked." : "Food liked.",
-        like: !alreadyLiked,
-        likeCount: food.likeCount
-    });
+    res.status(201).json({
+        message: "Food item liked successfully.",
+        like: true,
+        likeCount: updated?.likeCount ?? 0
+    })
 }
 
 async function saveFood(req, res) {
     const { foodId } = req.body;
-    const userId = req.user._id;
+    const user = req.user;
 
-    const food = await foodModel.findById(foodId);
-    if (!food) {
-        return res.status(404).json({ message: "Food item not found." });
+    const isAlreadySaved = await saveModel.findOne({
+        user: user._id,
+        food: foodId
+    })
+
+    if (isAlreadySaved) {
+        await saveModel.deleteOne({
+            user: user._id,
+            food: foodId
+        })
+
+        // this decrement was missing before — count never went down on unsave
+        const updated = await foodModel.findByIdAndUpdate(
+            foodId,
+            { $inc: { saveCount: -1 } },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            message: "Food unsaved successfully.",
+            save: false,
+            saveCount: updated?.saveCount ?? 0
+        })
     }
 
-    if (!food.savedBy) food.savedBy = []
+    await saveModel.create({
+        user: user._id,
+        food: foodId
+    })
 
-    const alreadySaved = food.savedBy.some(id => id.toString() === userId.toString());
-
-    if (alreadySaved) {
-        food.savedBy.pull(userId);
-        food.savesCount = Math.max((food.savesCount || 0) - 1, 0);
-    } else {
-        food.savedBy.push(userId);
-        food.savesCount = (food.savesCount || 0) + 1;
-    }
-
-    await food.save();
+    const updated = await foodModel.findByIdAndUpdate(
+        foodId,
+        { $inc: { saveCount: 1 } },
+        { new: true }
+    );
 
     res.status(200).json({
-        message: alreadySaved ? "Food unsaved." : "Food saved.",
-        save: !alreadySaved,
-        savesCount: food.savesCount
-    });
+        message: "Food saved successfully.",
+        save: true,
+        saveCount: updated?.saveCount ?? 0
+    })
 }
 
+async function getSavedItems(req, res) {
+    const user = req.user;
+
+    const saves = await saveModel.find({ user: user._id }).populate('food')
+
+    const savedItems = saves
+        .filter((s) => s.food)
+        .map((s) => {
+            const obj = s.food.toObject()
+            return {
+                ...obj,
+                save: true,
+            }
+        })
+
+    res.status(200).json({
+        message: "Saved items fetched successfully.",
+        savedItems
+    })
+}
+
+async function addComment(req, res) {
+    const { id } = req.params
+    const { text } = req.body
+ 
+    if (!text || !text.trim()) {
+        return res
+          .status(400)
+          .json({ message: "Comment text is required." })
+    }
+ 
+    const foodItem = await foodModel.findById(id)
+    if (!foodItem) {
+        return res
+          .status(404)
+          .json({ message: "Food item not found." })
+    }
+ 
+    const comment = await commentModel.create({
+        text: text.trim(),
+        food: id,
+        user: req.user._id
+    })
+ 
+    foodItem.commentsCount = (foodItem.commentsCount || 0) + 1
+    await foodItem.save()
+ 
+    const populatedComment = await comment.populate('user', 'fullName')
+ 
+    res
+      .status(201)
+      .json({
+        message: "Comment added successfully.",
+        comment: populatedComment
+      })
+}
+
+async function getComments(req, res) {
+    const { id } = req.params
+ 
+    const foodItem = await foodModel.findById(id)
+    if (!foodItem) {
+        return res
+          .status(404)
+          .json({ message: "Food item not found." })
+    }
+ 
+    const comments = await commentModel
+        .find({ food: id })
+        .sort({ createdAt: 1 })
+        .populate('user', 'fullName')
+ 
+    res
+      .status(200)
+      .json({
+        message: "Comments fetched successfully.",
+        comments
+      })
+}
+
+ 
+// POST /api/food/:id/comments  [protected - user]
 
 module.exports = {
     createFood,
     getFoodItems,
     likeFood,
-    saveFood
+    saveFood,
+    getSavedItems,
+    addComment,
+    getComments
 }

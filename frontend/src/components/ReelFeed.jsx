@@ -1,13 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Heart, Bookmark, Share2 } from 'lucide-react'
+import { Heart, Bookmark, Share2, MessageCircle } from 'lucide-react'
+import CommentsSheet from './CommentsSheet'
 import '../styles/reels.css'
 
-const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
+const ReelFeed = ({ items, onLike, onSave, onShare, emptyMessage }) => {
   const containerRef = useRef(null)
   const videoRefs = useRef(new Map())
   const [activeIndex, setActiveIndex] = useState(0)
   const [pendingIds, setPendingIds] = useState(new Set())
+  const [commentCounts, setCommentCounts] = useState({})
+  const [openCommentsFor, setOpenCommentsFor] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -62,6 +65,20 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
     }
   }
 
+  const handleShare = async (item) => {
+    const url = `${window.location.origin}/reel/${item._id}`
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: item.name, text: item.description, url })
+      } else {
+        await navigator.clipboard.writeText(url)
+      }
+    } catch (err) {
+      // user cancelled the native share sheet - not an error worth logging
+    }
+    if (onShare) onShare(item)
+  }
+
   const handleVisitStore = (item) => {
     // foodPartner may come through as a raw ObjectId string, or as a
     // populated object ({ _id, name, ... }) if the backend route ever
@@ -75,6 +92,16 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
     navigate(`/food-partner/${partnerId}`)
   }
 
+  const handleCommentPosted = (foodId) => {
+    setCommentCounts((prev) => ({
+      ...prev,
+      [foodId]: (prev[foodId] ?? 0) + 1
+    }))
+  }
+
+  const getCommentCount = (item) =>
+    commentCounts[item._id] ?? item.commentsCount ?? 0
+
   if (!items || items.length === 0) {
     return (
       <div className="reel-feed-empty">
@@ -86,7 +113,7 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
   return (
     <div className="reel-feed-container" ref={containerRef}>
       {items.map((item, index) => (
-        <div key={item._id || index} className="reel-item" style={{ background: '#000' }}>
+        <div key={item._id || index} className="reel-item">
           <div className="reel-video-wrapper" style={{ position: 'relative', width: '100%', maxWidth: '500px', height: '100vh', margin: '0 auto' }}>
             <video
               ref={(el) => {
@@ -119,10 +146,19 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
                   <Heart
                     size={24}
                     strokeWidth={2}
-                    fill={item.isLiked ? '#ff4d4f' : 'none'}
-                    color={item.isLiked ? '#ff4d4f' : 'currentColor'}
+                    fill={item.like ? '#ff4d4f' : 'none'}
+                    color={item.like ? '#ff4d4f' : 'currentColor'}
                   />
                   <span className="action-count">{item.likeCount || 0}</span>
+                </button>
+
+                <button
+                  className="reel-action-btn comment-btn"
+                  onClick={() => setOpenCommentsFor(item._id)}
+                  title="Comment"
+                >
+                  <MessageCircle size={24} strokeWidth={2} />
+                  <span className="action-count">{getCommentCount(item)}</span>
                 </button>
 
                 <button
@@ -133,13 +169,17 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
                   <Bookmark
                     size={24}
                     strokeWidth={2}
-                    fill={item.isSaved ? '#ffffff' : 'none'}
-                    color={item.isSaved ? '#ffffff' : 'currentColor'}
+                    fill={item.save ? '#ffffff' : 'none'}
+                    color={item.save ? '#ffffff' : 'currentColor'}
                   />
-                  <span className="action-count">{item.savesCount || 0}</span>
+                  <span className="action-count">{item.saveCount || 0}</span>
                 </button>
 
-                <button className="reel-action-btn share-btn" title="Share">
+                <button
+                  className="reel-action-btn share-btn"
+                  onClick={() => handleShare(item)}
+                  title="Share"
+                >
                   <Share2 size={24} strokeWidth={2} />
                 </button>
               </div>
@@ -147,6 +187,14 @@ const ReelFeed = ({ items, onLike, onSave, emptyMessage }) => {
           </div>
         </div>
       ))}
+
+      {openCommentsFor && (
+        <CommentsSheet
+          foodId={openCommentsFor}
+          onClose={() => setOpenCommentsFor(null)}
+          onCommentPosted={handleCommentPosted}
+        />
+      )}
     </div>
   )
 }

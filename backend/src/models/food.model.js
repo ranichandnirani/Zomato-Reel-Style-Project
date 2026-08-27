@@ -18,22 +18,16 @@ const foodSchema = new mongoose.Schema({
     },
     likeCount: {
         type: Number,
-        default: 0,
+        default: 0
     },
-    savesCount: {
+    saveCount: {
         type: Number,
         default: 0
     },
-    likedBy: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        required: true
-    }],
-    savedBy: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        required: true
-    }]
+    commentsCount: {
+        type: Number,
+        default: 0
+    }
     
 })
 
