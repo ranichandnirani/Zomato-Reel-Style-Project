@@ -114,7 +114,7 @@ const ReelFeed = ({ items, onLike, onSave, onShare, emptyMessage }) => {
     <div className="reel-feed-container" ref={containerRef}>
       {items.map((item, index) => (
         <div key={item._id || index} className="reel-item">
-          <div className="reel-video-wrapper" style={{ position: 'relative', width: '100%', maxWidth: '500px', height: '100vh', margin: '0 auto' }}>
+          <div className="reel-video-wrapper">
             <video
               ref={(el) => {
                 if (el) videoRefs.current.set(index, el)

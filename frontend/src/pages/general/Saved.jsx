@@ -67,7 +67,7 @@ const Saved = () => {
               />
               <div className="saved-grid-item__overlay">
                 <span>
-                  <Heart size={12} fill="#fff" />
+                  <Heart size={12} fill="#ff4d4f" color='none'/>
                   {item.likeCount || 0}
                 </span>
               </div>
