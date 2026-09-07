@@ -86,7 +86,7 @@ html, body, #root {
   pointer-events: none;
   gap: 16px;
   z-index: 2;
-  padding: 20px;
+  padding: 20px 0;
   /* extra clearance so content never sits under an app-level
      bottom nav bar; safe-area-inset covers notched phones */
   padding-bottom: calc(20px + var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
@@ -144,6 +144,8 @@ html, body, #root {
   flex-direction: column;
   gap: 16px;
   align-items: flex-end;
+  align-self: flex-end;
+  width: max-content;
   margin-right: 16px;
   margin-bottom: 4px;
 }
@@ -373,17 +375,13 @@ html, body, #root {
 /* Responsive - tablets and small laptops */
 @media (max-width: 768px) {
   .reel-overlay {
-    padding: 16px;
+    padding: 16px 0;
     padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
 
-  .reel-actions {
-    margin-right: 8px;
-  }
-
   .reel-action-btn {
-    width: 45px;
-    height: 45px;
+    width: auto;
+    height: auto;
   }
 
   .reel-description {
@@ -399,7 +397,7 @@ html, body, #root {
 /* Responsive - phones */
 @media (max-width: 480px) {
   .reel-overlay {
-    padding: 14px;
+    padding: 14px 0;
     padding-bottom: calc(14px + var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
     gap: 10px;
   }
@@ -410,7 +408,6 @@ html, body, #root {
   }
 
   .reel-actions {
-    margin-right: 4px;
     gap: 12px;
   }
 
