@@ -2,6 +2,7 @@ const { router } = require('../app.js');
 const foodModel = require('../models/food.model.js');
 const likeModel = require('../models/likes.model.js');
 const saveModel = require('../models/save.model.js');
+const commentModel = require('../models/comment.model.js');
 const storageService = require("../services/storage.service.js");
 const { v4: uuid } = require('uuid');
 
@@ -158,6 +159,12 @@ async function getSavedItems(req, res) {
     const user = req.user;
 
     const saves = await saveModel.find({ user: user._id }).populate('food')
+    const savedFoodIds = saves.filter((save) => save.food).map((save) => save.food._id)
+    const likes = await likeModel.find({
+        user: user._id,
+        food: { $in: savedFoodIds }
+    })
+    const likedFoodIds = new Set(likes.map((like) => like.food.toString()))
 
     const savedItems = saves
         .filter((s) => s.food)
@@ -165,6 +172,7 @@ async function getSavedItems(req, res) {
             const obj = s.food.toObject()
             return {
                 ...obj,
+                like: likedFoodIds.has(obj._id.toString()),
                 save: true,
             }
         })
@@ -201,7 +209,7 @@ async function addComment(req, res) {
     foodItem.commentsCount = (foodItem.commentsCount || 0) + 1
     await foodItem.save()
  
-    const populatedComment = await comment.populate('user', 'fullName')
+    const populatedComment = await comment.populate('user', 'fullName avatar')
  
     res
       .status(201)
@@ -209,6 +217,42 @@ async function addComment(req, res) {
         message: "Comment added successfully.",
         comment: populatedComment
       })
+}
+
+async function reactToComment(req, res) {
+    const { id } = req.params
+    const { reaction } = req.body
+    if (!['like', 'dislike'].includes(reaction)) {
+        return res.status(400).json({ message: 'Invalid reaction.' })
+    }
+
+    const comment = await commentModel.findById(id)
+    if (!comment) return res.status(404).json({ message: 'Comment not found.' })
+
+    const userId = req.user._id.toString()
+    const likes = (comment.likes || []).map((value) => value.toString())
+    const dislikes = (comment.dislikes || []).map((value) => value.toString())
+    const target = reaction === 'like' ? likes : dislikes
+    const opposite = reaction === 'like' ? dislikes : likes
+    const targetIndex = target.indexOf(userId)
+
+    if (targetIndex >= 0) {
+        target.splice(targetIndex, 1)
+    } else {
+        target.push(userId)
+        const oppositeIndex = opposite.indexOf(userId)
+        if (oppositeIndex >= 0) opposite.splice(oppositeIndex, 1)
+    }
+
+    comment.likes = likes
+    comment.dislikes = dislikes
+    await comment.save()
+
+    res.status(200).json({
+        reaction: target.includes(userId) ? reaction : null,
+        likeCount: likes.length,
+        dislikeCount: dislikes.length
+    })
 }
 
 async function getComments(req, res) {
@@ -224,13 +268,26 @@ async function getComments(req, res) {
     const comments = await commentModel
         .find({ food: id })
         .sort({ createdAt: 1 })
-        .populate('user', 'fullName')
+        .populate('user', 'fullName avatar')
+
+    const userId = req.user._id.toString()
+    const commentsWithReactions = comments.map((comment) => {
+        const obj = comment.toObject()
+        return {
+            ...obj,
+            likeCount: obj.likes?.length || 0,
+            dislikeCount: obj.dislikes?.length || 0,
+            reaction: obj.likes?.some((value) => value.toString() === userId)
+                ? 'like'
+                : obj.dislikes?.some((value) => value.toString() === userId) ? 'dislike' : null
+        }
+    })
  
     res
       .status(200)
       .json({
         message: "Comments fetched successfully.",
-        comments
+        comments: commentsWithReactions
       })
 }
 
@@ -244,5 +301,6 @@ module.exports = {
     saveFood,
     getSavedItems,
     addComment,
+    reactToComment,
     getComments
 }

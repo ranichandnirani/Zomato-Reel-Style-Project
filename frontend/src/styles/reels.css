@@ -3,12 +3,12 @@
 /* Prevents any page-level scroll/bleed behind the reel feed,
    and 100dvh (below) avoids the 100vh sub-pixel gap that lets
    the next snapped item peek through at the bottom. */
-html, body, #root {
+/* html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
-}
+} */
 
 /* Reel Feed Container */
 .reel-feed-container {
@@ -295,7 +295,9 @@ html, body, #root {
 
 .comment-item {
   display: flex;
+  align-items: flex-start;
   gap: 10px;
+  min-width: 0;
 }
 
 .comment-avatar {
@@ -310,9 +312,12 @@ html, body, #root {
   font-size: 0.8rem;
   font-weight: 600;
   flex-shrink: 0;
+  object-fit: cover;
 }
 
 .comment-body {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -328,6 +333,43 @@ html, body, #root {
   font-size: 0.85rem;
   color: var(--action-text);
   line-height: 1.4;
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-top: 15px;
+  padding-left: 8px;
+}
+
+.comment-reaction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 34px;
+  min-height: 30px;
+  padding: 5px 6px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--muted);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.comment-reaction.active {
+  color: var(--primary);
+  /* background: var(--primary-tint); */
+}
+
+.comment-reaction:hover {
+  color: var(--primary);
+  background: var(--primary-tint);
 }
 
 .comments-empty {

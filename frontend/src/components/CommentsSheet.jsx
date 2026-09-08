@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { X, Send } from 'lucide-react'
+import { X, Send, ThumbsUp, ThumbsDown } from 'lucide-react'
 import axios from 'axios'
 
 // Renders a bottom sheet of comments for a single food item.
@@ -19,7 +19,7 @@ const CommentsSheet = ({ foodId, onClose, onCommentPosted }) => {
     async function loadComments() {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/food/${foodId}/comments`,
+          `http://localhost:3000/api/food/comments/${foodId}`,
           { withCredentials: true }
         )
         if (!cancelled) setComments(res.data.comments || [])
@@ -60,6 +60,23 @@ const CommentsSheet = ({ foodId, onClose, onCommentPosted }) => {
     if (e.key === 'Enter') handleSend()
   }
 
+  const handleReaction = async (comment, reaction) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:3000/api/food/comments/${comment._id}/reaction`,
+        { reaction },
+        { withCredentials: true }
+      )
+      setComments((prev) => prev.map((item) => (
+        item._id === comment._id
+          ? { ...item, ...res.data }
+          : item
+      )))
+    } catch (err) {
+      console.error('Failed to react to comment', err)
+    }
+  }
+
   const initials = (name) =>
     (name || '?').trim().charAt(0).toUpperCase()
 
@@ -83,10 +100,22 @@ const CommentsSheet = ({ foodId, onClose, onCommentPosted }) => {
 
           {!loading && comments.map((c) => (
             <div className="comment-item" key={c._id}>
-              <div className="comment-avatar">{initials(c.user?.fullName)}</div>
+              {c.user?.avatar ? (
+                <img className="comment-avatar" src={c.user.avatar} alt="" />
+              ) : (
+                <div className="comment-avatar">{initials(c.user?.fullName)}</div>
+              )}
               <div className="comment-body">
                 <span className="comment-author">{c.user?.fullName || 'User'}</span>
                 <span className="comment-text">{c.text}</span>
+              </div>
+              <div className="comment-actions">
+                <button className={c.reaction === 'like' ? 'comment-reaction active' : 'comment-reaction'} onClick={() => handleReaction(c, 'like')} aria-label="Like comment">
+                  <ThumbsUp size={15} /> <span>{c.likeCount || 0}</span>
+                </button>
+                <button className={c.reaction === 'dislike' ? 'comment-reaction active' : 'comment-reaction'} onClick={() => handleReaction(c, 'dislike')} aria-label="Dislike comment">
+                  <ThumbsDown size={15} /> <span>{c.dislikeCount || 0}</span>
+                </button>
               </div>
             </div>
           ))}

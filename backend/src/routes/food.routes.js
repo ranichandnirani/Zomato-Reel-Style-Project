@@ -39,7 +39,7 @@ router.get('/saved',
     foodController.getSavedItems
 )
 
-router.post('/comment',
+router.post('/:id/comments',
     authMiddleware.authUserMiddleware,
     foodController.addComment
 )
@@ -48,5 +48,10 @@ router.post('/comment',
 router.get('/comments/:id',
     authMiddleware.authUserMiddleware,
     foodController.getComments
+)
+
+router.post('/comments/:id/reaction',
+    authMiddleware.authUserMiddleware,
+    foodController.reactToComment
 )
 module.exports = router;

@@ -16,7 +16,15 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
         required: true
-    }
+    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    }],
+    dislikes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    }]
 }, { timestamps: true })
 
 const commentModel = mongoose.model("comment", commentSchema);

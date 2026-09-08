@@ -1,0 +1,80 @@
+@import './theme.css';
+
+.user-profile-page {
+  min-height: 100vh;
+  padding: 40px 20px 100px;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.user-profile-card {
+  width: min(100%, 520px);
+  display: grid;
+  gap: 24px;
+  padding: 36px 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.user-profile-avatar-wrap {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.user-profile-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary);
+  box-shadow: 0 8px 24px rgba(255, 90, 95, 0.2);
+}
+
+.user-profile-avatar--empty {
+  display: grid;
+  place-items: center;
+  background: var(--primary-tint);
+  color: var(--primary);
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+.user-profile-camera {
+  position: absolute;
+  right: calc(50% - 92px);
+  bottom: 2px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--surface-strong);
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--text-white);
+  cursor: pointer;
+}
+
+.user-profile-file-input { display: none; }
+.user-profile-fields { display: grid; gap: 14px; align-content: start; }
+.user-profile-eyebrow { margin: 0; color: var(--muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.user-profile-name-row { display: flex; align-items: center; gap: 8px; color: var(--primary); border-bottom: 1px solid var(--border); }
+.user-profile-name-input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--text); font-size: 1.7rem; font-weight: 700; padding: 4px 0 10px; }
+.user-profile-save { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: var(--radius-md); background: var(--primary); color: var(--text-white); padding: 12px 18px; font-weight: 700; cursor: pointer; }
+.user-profile-save:disabled { opacity: 0.65; cursor: wait; }
+.user-profile-message { margin: 0; color: var(--muted); }
+
+@media (min-width: 769px) {
+  .user-profile-page {
+    margin-left: 275px;
+  }
+}
+
+@media (max-width: 620px) {
+  .user-profile-card { padding: 28px 24px; }
+}

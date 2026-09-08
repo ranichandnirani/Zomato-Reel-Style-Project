@@ -15,11 +15,13 @@ const UserRegister = () => {
     const email = e.target.email.value
     const password = e.target.password.value
 
-    const response = await axios.post('http://localhost:3000/api/auth/user/register', {
-      fullName: firstName + ' ' + lastName,
-      email,
-      password
-    }, {
+    const formData = new FormData()
+    formData.append('fullName', firstName + ' ' + lastName)
+    formData.append('email', email)
+    formData.append('password', password)
+    if (e.target.avatar.files[0]) formData.append('avatar', e.target.avatar.files[0])
+
+    const response = await axios.post('http://localhost:3000/api/auth/user/register', formData, {
       withCredentials: true
     })
 
@@ -64,6 +66,11 @@ const UserRegister = () => {
             <label className="auth-field">
               <span>Password</span>
               <input name="password" type="password" placeholder="Enter password" />
+            </label>
+
+            <label className="auth-field">
+              <span>Profile photo</span>
+              <input name="avatar" type="file" accept="image/*" />
             </label>
 
             <button type="submit" className="auth-submit">Create account</button>

@@ -17,8 +17,22 @@ async function getFoodPartnerById(req, res) {
         message: "Food partner found", 
         foodPartner: {
         ...foodPartner.toObject(),
-        foodItems: foodItemsByFoodPartner
+        foodItems: foodItemsByFoodPartner,
+        totalMeals: foodItemsByFoodPartner.length
     } })
 }
 
-module.exports = { getFoodPartnerById }
+async function incrementCustomersServed(req, res) {
+    const foodPartner = await foodPartnerModel.findByIdAndUpdate(
+        req.foodPartner._id,
+        { $inc: { customersServed: 1 } },
+        { new: true }
+    )
+
+    res.status(200).json({
+        message: 'Customer count updated successfully.',
+        customersServed: foodPartner.customersServed
+    })
+}
+
+module.exports = { getFoodPartnerById, incrementCustomersServed }
