@@ -43,7 +43,7 @@
   --action-text: #ffffff;
 
   /* Misc */
-  --overlay-gradient: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  --overlay-gradient: linear-gradient(to top, rgba(15, 23, 42, 0.58), transparent 58%);
   --font-family: Inter, "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -52,8 +52,8 @@
 
   /* Bottom nav */
   --bottom-nav-height: 60px;
-  --bottom-nav-bg: rgba(255, 255, 255, 0.96);
-  --bottom-nav-border: rgba(15, 23, 42, 0.08);
+  --bottom-nav-bg: rgba(255, 255, 255, 0.78);
+  --bottom-nav-border: rgba(255, 255, 255, 0.92);
   --bottom-nav-active: var(--primary);
   --bottom-nav-inactive: #667085;
 }
@@ -85,10 +85,10 @@
   --shadow-btn: 0 4px 12px rgba(255, 90, 95, 0.25);
   --shadow-btn-hover: 0 6px 16px rgba(255, 90, 95, 0.35);
 
-  --overlay-gradient: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  --overlay-gradient: linear-gradient(to top, rgba(2, 6, 23, 0.72), transparent 58%);
 
-  --bottom-nav-bg: rgba(15, 23, 42, 0.96);
-  --bottom-nav-border: rgba(226, 232, 240, 0.10);
+  --bottom-nav-bg: rgba(15, 23, 42, 0.28);
+  --bottom-nav-border: rgba(226, 232, 240, 0.22);
   --bottom-nav-active: var(--primary);
   --bottom-nav-inactive: #94a3b8;
 }
@@ -121,10 +121,10 @@
     --shadow-btn: 0 4px 12px rgba(255, 90, 95, 0.25);
     --shadow-btn-hover: 0 6px 16px rgba(255, 90, 95, 0.35);
 
-    --overlay-gradient: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    --overlay-gradient: linear-gradient(to top, rgba(2, 6, 23, 0.72), transparent 58%);
 
-    --bottom-nav-bg: rgba(15, 23, 42, 0.96);
-    --bottom-nav-border: rgba(226, 232, 240, 0.10);
+    --bottom-nav-bg: rgba(15, 23, 42, 0.28);
+    --bottom-nav-border: rgba(226, 232, 240, 0.22);
     --bottom-nav-active: var(--primary);
     --bottom-nav-inactive: #94a3b8;
   }

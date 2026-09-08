@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Bookmark, Heart } from 'lucide-react'
+import { Bookmark, Heart, X } from 'lucide-react'
 import '../../styles/saved.css'
+import ReelFeed from '../../components/ReelFeed'
 
 const Saved = () => {
   const [savedItems, setSavedItems] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedId, setSelectedId] = useState(null)
 
   const fetchSavedItems = async () => {
     try {
@@ -27,6 +29,37 @@ const Saved = () => {
   useEffect(() => {
     fetchSavedItems()
   }, [])
+
+  const selectedItem = savedItems.find((item) => item._id === selectedId)
+
+  async function likeVideo(item) {
+    const response = await axios.post(
+      'http://localhost:3000/api/food/like',
+      { foodId: item._id },
+      { withCredentials: true }
+    )
+
+    const nowLiked = response.data.like
+    setSavedItems((prev) => prev.map((video) => (
+      video._id === item._id
+        ? {
+            ...video,
+            like: nowLiked,
+            likeCount: Math.max((video.likeCount || 0) + (nowLiked ? 1 : -1), 0),
+          }
+        : video
+    )))
+  }
+
+  async function saveVideo(item) {
+    await axios.post(
+      'http://localhost:3000/api/food/save',
+      { foodId: item._id },
+      { withCredentials: true }
+    )
+    setSavedItems((prev) => prev.filter((video) => video._id !== item._id))
+    setSelectedId(null)
+  }
 
   if (loading) {
     return (
@@ -55,7 +88,16 @@ const Saved = () => {
       ) : (
         <div className="saved-grid">
           {savedItems.map((item) => (
-            <div key={item._id} className="saved-grid-item">
+            <div
+              key={item._id}
+              className="saved-grid-item"
+              onClick={() => setSelectedId(item._id)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') setSelectedId(item._id)
+              }}
+            >
               <video
                 src={item.video || item.src || item.url}
                 muted
@@ -73,6 +115,25 @@ const Saved = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {selectedItem && (
+        <div className="saved-reel-viewer" role="dialog" aria-modal="true">
+          <button
+            type="button"
+            className="saved-reel-viewer__close"
+            onClick={() => setSelectedId(null)}
+            aria-label="Close saved reel"
+          >
+            <X size={24} />
+          </button>
+          <ReelFeed
+            items={[selectedItem]}
+            onLike={likeVideo}
+            onSave={saveVideo}
+            emptyMessage="No saved videos yet."
+          />
         </div>
       )}
     </div>

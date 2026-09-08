@@ -45,7 +45,7 @@ function Profile() {
         <div className="profile-stats">
           <div className="profile-stat-group">
             <div className="stat-label">Total Meals</div>
-            <div className="stat-value">{profile.foods?.length ?? 0}</div>
+            <div className="stat-value">{profile.totalMeals ?? videos.length}</div>
           </div>
           <div className="profile-stat-group">
             <div className="stat-label">Customers served</div>

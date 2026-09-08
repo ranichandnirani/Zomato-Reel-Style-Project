@@ -1,26 +1,80 @@
 @import './theme.css';
 
-/* Bottom Navigation — mobile only */
+/* Full-height desktop navigation panel */
 .bottom-nav {
-  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 275px;
+  height: 100vh;
+  background: var(--bottom-nav-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--bottom-nav-border);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+  z-index: 9999;
+  padding: 35px 20px;
+  box-sizing: border-box;
+  box-shadow: 8px 0 30px rgba(15, 23, 42, 0.12);
+}
+
+.bottom-nav__link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--bottom-nav-inactive);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  transition: color 0.2s ease, background 0.2s ease;
+  position: relative;
+}
+
+.bottom-nav__link svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.2s ease;
+}
+
+.bottom-nav__link--active {
+  color: var(--bottom-nav-active);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.bottom-nav__link--active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  left: auto;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 36px;
+  border-radius: 4px 0 0 4px;
+  background: var(--primary);
 }
 
 @media (max-width: 768px) {
   .bottom-nav {
-    position: fixed;
+    top: auto;
     bottom: 0;
     left: 0;
     right: 0;
+    width: auto;
     height: var(--bottom-nav-height);
-    background: var(--bottom-nav-bg);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-top: 1px solid var(--bottom-nav-border);
-    display: flex;
-    justify-content: space-around;
+    flex-direction: row;
     align-items: center;
-    z-index: 9999;
-    padding: 0 16px;
+    justify-content: space-around;
+    box-shadow: 0 -8px 30px rgba(15, 23, 42, 0.12);
   }
 
   .bottom-nav__link {
@@ -50,6 +104,7 @@
   }
 
   .bottom-nav__link--active {
+    background: transparent;
     color: var(--bottom-nav-active);
   }
 
@@ -69,5 +124,14 @@
   .has-bottom-nav .reel-feed-container,
   .has-bottom-nav .reel-feed-empty {
     padding-bottom: var(--bottom-nav-height);
+  }
+}
+
+@media (min-width: 769px) {
+  .reel-feed-container,
+  .reel-feed-empty,
+  .saved-page {
+    margin-left: 275px;
+    width: calc(100% - 275px);
   }
 }

@@ -65,19 +65,19 @@ const ReelFeed = ({ items, onLike, onSave, onShare, emptyMessage }) => {
     }
   }
 
-  const handleShare = async (item) => {
-    const url = `${window.location.origin}/reel/${item._id}`
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: item.name, text: item.description, url })
-      } else {
-        await navigator.clipboard.writeText(url)
-      }
-    } catch (err) {
-      // user cancelled the native share sheet - not an error worth logging
-    }
-    if (onShare) onShare(item)
-  }
+  // const handleShare = async (item) => {
+  //   const url = `${window.location.origin}/reel/${item._id}`
+  //   try {
+  //     if (navigator.share) {
+  //       await navigator.share({ title: item.name, text: item.description, url })
+  //     } else {
+  //       await navigator.clipboard.writeText(url)
+  //     }
+  //   } catch (err) {
+  //     // user cancelled the native share sheet - not an error worth logging
+  //   }
+  //   if (onShare) onShare(item)
+  // }
 
   const handleVisitStore = (item) => {
     // foodPartner may come through as a raw ObjectId string, or as a
@@ -175,13 +175,13 @@ const ReelFeed = ({ items, onLike, onSave, onShare, emptyMessage }) => {
                   <span className="action-count">{item.saveCount || 0}</span>
                 </button>
 
-                <button
+                {/* <button
                   className="reel-action-btn share-btn"
                   onClick={() => handleShare(item)}
                   title="Share"
                 >
                   <Share2 size={24} strokeWidth={2} />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
