@@ -5,6 +5,50 @@ const foodpartnerModel = require("../models/foodpartner.model.js");
 const storageService = require('../services/storage.service.js');
 const { v4: uuid } = require('uuid');
 
+async function getCurrentSession(req, res) {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(200).json({ authenticated: false })
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const user = await userModel.findById(decoded.id)
+
+        if (user) {
+            return res.status(200).json({
+                authenticated: true,
+                role: 'user',
+                account: {
+                    _id: user._id,
+                    email: user.email,
+                    name: user.fullName,
+                    avatar: user.avatar || ''
+                }
+            })
+        }
+
+        const foodPartner = await foodpartnerModel.findById(decoded.id)
+
+        if (foodPartner) {
+            return res.status(200).json({
+                authenticated: true,
+                role: 'food-partner',
+                account: {
+                    _id: foodPartner._id,
+                    email: foodPartner.email,
+                    name: foodPartner.name
+                }
+            })
+        }
+    } catch (error) {
+        // Treat invalid or expired cookies as an anonymous session.
+    }
+
+    return res.status(200).json({ authenticated: false })
+}
+
 async function registerUser(req, res) {
     const { fullName, email, password } = req.body;
 
@@ -140,6 +184,16 @@ function logOutUser(req, res) {
         })
     }
 
+    function getCurrentFoodPartner(req, res) {
+        res.status(200).json({
+            foodPartner: {
+                _id: req.foodPartner._id,
+                email: req.foodPartner.email,
+                name: req.foodPartner.name
+            }
+        })
+    }
+
 async function registerFoodPartner(req, res) {
     const {name, email, password, phone, address, contactName } = req.body;
 
@@ -242,12 +296,14 @@ function logOutFoodPartner(req, res) {
 }
 
 module.exports = {
+    getCurrentSession,
     registerUser,
     loginUser,
     logOutUser,
-        getCurrentUser,
-        updateUserProfile,
+    getCurrentUser,
+    updateUserProfile,
     registerFoodPartner,
     loginFoodPartner,
-    logOutFoodPartner
+    logOutFoodPartner,
+    getCurrentFoodPartner
 }

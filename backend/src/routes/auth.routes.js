@@ -8,6 +8,8 @@ const authMiddleware = require('../middlewares/auth.middleware');
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
+router.get('/session', authController.getCurrentSession);
+
 // user auth APIs
 router.post('/user/register', upload.single('avatar'), authController.registerUser);
 router.post('/user/login', authController.loginUser);
@@ -18,6 +20,7 @@ router.get('/user/logout', authController.logOutUser);
 // food partner auth APIs
 router.post('/food-partner/register', authController.registerFoodPartner);
 router.post('/food-partner/login', authController.loginFoodPartner);
+router.get('/food-partner/me', authMiddleware.authFoodPartnerMiddleware, authController.getCurrentFoodPartner);
 router.get('/food-partner/logout', authController.logOutFoodPartner);
 
 module.exports = router;

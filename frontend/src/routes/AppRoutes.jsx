@@ -10,6 +10,7 @@ import UserProfile from '../pages/general/UserProfile.jsx'
 import CreateFood  from '../pages/food-partner/CreateFood.jsx'
 import Profile from '../pages/food-partner/Profile.jsx'
 import BottomNav from '../components/BottomNav.jsx'
+import AuthGate from '../components/AuthGate.jsx'
 
 /* Show BottomNav only on Home and Saved pages */
 const BottomNavWrapper = () => {
@@ -21,17 +22,19 @@ const BottomNavWrapper = () => {
 const AppRoutes = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/saved" element={<Saved />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/user/register" element={<UserRegister />} />
-        <Route path="/user/login" element={<UserLogin />} />
-        <Route path="/food-partner/register" element={<FoodPartnerRegister />} />
-        <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
-        <Route path='/create-food' element={<CreateFood />} />
-        <Route path='/food-partner/:id' element={<Profile/> } />
-      </Routes>
+      <AuthGate>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/user/register" element={<UserRegister />} />
+          <Route path="/user/login" element={<UserLogin />} />
+          <Route path="/food-partner/register" element={<FoodPartnerRegister />} />
+          <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
+          <Route path='/create-food' element={<CreateFood />} />
+          <Route path='/food-partner/:id' element={<Profile/> } />
+        </Routes>
+      </AuthGate>
       <BottomNavWrapper />
     </Router>
   )

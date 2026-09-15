@@ -1,0 +1,102 @@
+@import './theme.css';
+
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-gate__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(10px);
+}
+
+.auth-gate__card {
+  position: relative;
+  width: min(100%, 520px);
+  padding: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  box-shadow: 0 28px 80px rgba(2, 6, 23, 0.3);
+  text-align: center;
+  animation: auth-gate-enter 240ms ease-out;
+}
+
+.auth-gate__card h1 {
+  margin: 20px 0 12px;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.auth-gate__card p {
+  margin: 0 auto;
+  max-width: 40ch;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.auth-gate__actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.auth-gate__actions .auth-submit {
+  width: 100%;
+  margin: 0;
+}
+
+.auth-gate__secondary {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-gate__secondary:hover,
+.auth-gate__partner button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.auth-gate__partner {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.auth-gate__partner button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@keyframes auth-gate-enter {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 480px) {
+  .auth-gate__card {
+    padding: 28px 20px;
+  }
+}
